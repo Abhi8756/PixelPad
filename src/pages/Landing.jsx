@@ -11,6 +11,11 @@ const Landing = () => {
     const [isErasing, setIsErasing] = useState(false);
     const [brushColor, setBrushColor] = useState('#000000');
     const [brushWidth, setBrushWidth] = useState(5);
+    
+    // Add active state tracking for text formatting
+    const [isBold, setIsBold] = useState(false);
+    const [isItalic, setIsItalic] = useState(false);
+    const [isUnderline, setIsUnderline] = useState(false);
 
     useEffect(() => {
         const canvas = new fabric.Canvas(canvasRef.current, {
@@ -26,6 +31,10 @@ const Landing = () => {
             if (active && active.type === 'textbox') {
                 setFontSize(active.fontSize || 20);
                 setFontFamily(active.fontFamily || 'Arial');
+                // Update active states based on selected text
+                setIsBold(active.fontWeight === 'bold');
+                setIsItalic(active.fontStyle === 'italic');
+                setIsUnderline(active.underline || false);
             }
         });
 
@@ -103,15 +112,24 @@ const Landing = () => {
 
         if (active && active.type === 'textbox') {
             switch (styleType) {
-                case 'bold':
-                    active.set('fontWeight', active.fontWeight === 'bold' ? 'normal' : 'bold');
+                case 'bold': {
+                    const newBold = active.fontWeight === 'bold' ? 'normal' : 'bold';
+                    active.set('fontWeight', newBold);
+                    setIsBold(newBold === 'bold');
                     break;
-                case 'italic':
-                    active.set('fontStyle', active.fontStyle === 'italic' ? 'normal' : 'italic');
+                }
+                case 'italic': {
+                    const newItalic = active.fontStyle === 'italic' ? 'normal' : 'italic';
+                    active.set('fontStyle', newItalic);
+                    setIsItalic(newItalic === 'italic');
                     break;
-                case 'underline':
-                    active.set('underline', !active.underline);
+                }
+                case 'underline': {
+                    const newUnderline = !active.underline;
+                    active.set('underline', newUnderline);
+                    setIsUnderline(newUnderline);
                     break;
+                }
                 default:
                     break;
             }
@@ -257,9 +275,51 @@ const Landing = () => {
                             </select>
                             <input type="number" value={fontSize} onChange={(e) => changeFontSize(parseInt(e.target.value))} placeholder="Font Size" style={{ width: '100%', backgroundColor: '#1e293b', border: '1px solid #374151', color: 'white', padding: '8px 12px', borderRadius: '8px' }} />
                             <div style={{ display: 'flex', gap: '8px' }}>
-                                <button onClick={() => updateStyle('bold')} style={{ flex: 1, backgroundColor: '#1e293b', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>B</button>
-                                <button onClick={() => updateStyle('italic')} style={{ flex: 1, backgroundColor: '#1e293b', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '8px', fontStyle: 'italic', cursor: 'pointer' }}>I</button>
-                                <button onClick={() => updateStyle('underline')} style={{ flex: 1, backgroundColor: '#1e293b', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '8px', textDecoration: 'underline', cursor: 'pointer' }}>U</button>
+                                <button 
+                                    onClick={() => updateStyle('bold')} 
+                                    style={{ 
+                                        flex: 1, 
+                                        backgroundColor: isBold ? '#9333ea' : '#1e293b', 
+                                        color: 'white', 
+                                        border: 'none', 
+                                        padding: '8px 12px', 
+                                        borderRadius: '8px', 
+                                        fontWeight: 'bold', 
+                                        cursor: 'pointer' 
+                                    }}
+                                >
+                                    B
+                                </button>
+                                <button 
+                                    onClick={() => updateStyle('italic')} 
+                                    style={{ 
+                                        flex: 1, 
+                                        backgroundColor: isItalic ? '#9333ea' : '#1e293b', 
+                                        color: 'white', 
+                                        border: 'none', 
+                                        padding: '8px 12px', 
+                                        borderRadius: '8px', 
+                                        fontStyle: 'italic', 
+                                        cursor: 'pointer' 
+                                    }}
+                                >
+                                    I
+                                </button>
+                                <button 
+                                    onClick={() => updateStyle('underline')} 
+                                    style={{ 
+                                        flex: 1, 
+                                        backgroundColor: isUnderline ? '#9333ea' : '#1e293b', 
+                                        color: 'white', 
+                                        border: 'none', 
+                                        padding: '8px 12px', 
+                                        borderRadius: '8px', 
+                                        textDecoration: 'underline', 
+                                        cursor: 'pointer' 
+                                    }}
+                                >
+                                    U
+                                </button>
                             </div>
                         </div>
                     </div>
