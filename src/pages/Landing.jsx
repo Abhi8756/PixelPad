@@ -20,10 +20,14 @@ const Landing = () => {
             width: 800,
             height: 600,
             backgroundColor: '#fff',
+            preserveObjectStacking: true,
         });
 
         fabricRef.current = canvas;
 
+        // Prevent canvas from clearing drawings
+        canvas.renderOnAddRemove = true;
+        
         // Optional: allow selecting text box on click
         canvas.on('mouse:down', () => {
             const active = canvas.getActiveObject();
@@ -206,61 +210,83 @@ const Landing = () => {
 
 
     return (
-        <div className="flex h-screen bg-slate-950 text-white">
+        <div style={{ display: 'flex', height: '100vh', backgroundColor: '#020617', color: 'white' }}>
             {/* Left Sidebar - Tools */}
-            <div className="w-80 bg-slate-900 border-r border-slate-700 p-6 overflow-y-auto">
+            <div style={{ 
+                width: '320px', 
+                backgroundColor: '#0f172a', 
+                borderRight: '1px solid #374151', 
+                padding: '24px', 
+                overflowY: 'auto' 
+            }}>
                 {/* Header */}
-                <div className="mb-8">
-                    <h1 className="text-2xl font-bold text-purple-400">PixelPad</h1>
-                    <p className="text-slate-400 text-sm mt-1">Professional Drawing Studio</p>
+                <div style={{ marginBottom: '32px' }}>
+                    <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#a855f7', margin: 0 }}>PixelPad</h1>
+                    <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '4px', margin: 0 }}>Professional Drawing Studio</p>
                 </div>
 
                 {/* Drawing Tools */}
-                <div className="space-y-6">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                     <div>
-                        <h3 className="text-lg font-semibold mb-3 text-purple-300">Drawing Tools</h3>
-                        <div className="space-y-3">
+                        <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '12px', color: '#d8b4fe', margin: '0 0 12px 0' }}>Drawing Tools</h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                             <button
                                 onClick={toggleDrawing}
-                                className={`w-full px-4 py-3 rounded-lg font-medium transition-all ${
-                                    isDrawing 
-                                        ? 'bg-purple-600 text-white shadow-lg' 
-                                        : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-                                }`}
+                                style={{
+                                    backgroundColor: isDrawing ? '#9333ea' : '#374151',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '12px 16px',
+                                    borderRadius: '8px',
+                                    width: '100%',
+                                    fontWeight: '500',
+                                    cursor: 'pointer'
+                                }}
                             >
-                                {isDrawing ? '🎨 Drawing Active' : '✏️ Draw Mode'}
+                                {isDrawing ? 'Drawing Active' : 'Draw Mode'}
                             </button>
 
                             <button
                                 onClick={toggleEraser}
-                                className={`w-full px-4 py-3 rounded-lg font-medium transition-all ${
-                                    isErasing 
-                                        ? 'bg-red-600 text-white shadow-lg' 
-                                        : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-                                }`}
+                                style={{
+                                    backgroundColor: isErasing ? '#dc2626' : '#374151',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '12px 16px',
+                                    borderRadius: '8px',
+                                    width: '100%',
+                                    fontWeight: '500',
+                                    cursor: 'pointer'
+                                }}
                             >
-                                {isErasing ? '🧹 Erasing Active' : '🧽 Eraser'}
+                                {isErasing ? 'Erasing Active' : 'Eraser'}
                             </button>
                         </div>
                     </div>
 
                     {/* Brush Settings */}
                     <div>
-                        <h3 className="text-lg font-semibold mb-3 text-purple-300">Brush Settings</h3>
-                        <div className="space-y-4">
+                        <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '12px', color: '#d8b4fe', margin: '0 0 12px 0' }}>Brush Settings</h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                             <div>
-                                <label className="block text-sm font-medium mb-2 text-slate-300">Color</label>
+                                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: '#cbd5e1' }}>Color</label>
                                 <input
                                     type="color"
                                     value={brushColor}
                                     onChange={(e) => changeBrushColor(e.target.value)}
-                                    className="w-full h-12 rounded-lg border-2 border-slate-700 bg-slate-800"
+                                    style={{
+                                        width: '100%',
+                                        height: '48px',
+                                        borderRadius: '8px',
+                                        border: '2px solid #374151',
+                                        backgroundColor: '#1e293b'
+                                    }}
                                     disabled={isErasing}
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium mb-2 text-slate-300">
+                                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: '#cbd5e1' }}>
                                     Brush Size: {brushWidth}px
                                 </label>
                                 <input
@@ -269,7 +295,14 @@ const Landing = () => {
                                     max="30"
                                     value={brushWidth}
                                     onChange={(e) => changeBrushWidth(parseInt(e.target.value))}
-                                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                                    style={{
+                                        width: '100%',
+                                        height: '8px',
+                                        backgroundColor: '#374151',
+                                        borderRadius: '8px',
+                                        outline: 'none',
+                                        cursor: 'pointer'
+                                    }}
                                 />
                             </div>
                         </div>
@@ -277,19 +310,35 @@ const Landing = () => {
 
                     {/* Text Tools */}
                     <div>
-                        <h3 className="text-lg font-semibold mb-3 text-purple-300">Text Tools</h3>
-                        <div className="space-y-3">
+                        <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '12px', color: '#d8b4fe', margin: '0 0 12px 0' }}>Text Tools</h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                             <button 
                                 onClick={addText} 
-                                className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-medium transition-all"
+                                style={{
+                                    backgroundColor: '#2563eb',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '12px 16px',
+                                    borderRadius: '8px',
+                                    width: '100%',
+                                    fontWeight: '500',
+                                    cursor: 'pointer'
+                                }}
                             >
-                                📝 Add Text
+                                Add Text
                             </button>
 
                             <select
                                 value={fontFamily}
                                 onChange={(e) => changeFontFamily(e.target.value)}
-                                className="w-full bg-slate-800 border border-slate-700 text-white px-3 py-2 rounded-lg"
+                                style={{
+                                    width: '100%',
+                                    backgroundColor: '#1e293b',
+                                    border: '1px solid #374151',
+                                    color: 'white',
+                                    padding: '8px 12px',
+                                    borderRadius: '8px'
+                                }}
                             >
                                 <option value="Arial">Arial</option>
                                 <option value="Courier New">Courier New</option>
@@ -302,26 +351,60 @@ const Landing = () => {
                                 type="number"
                                 value={fontSize}
                                 onChange={(e) => changeFontSize(parseInt(e.target.value))}
-                                className="w-full bg-slate-800 border border-slate-700 text-white px-3 py-2 rounded-lg"
                                 placeholder="Font Size"
+                                style={{
+                                    width: '100%',
+                                    backgroundColor: '#1e293b',
+                                    border: '1px solid #374151',
+                                    color: 'white',
+                                    padding: '8px 12px',
+                                    borderRadius: '8px'
+                                }}
                             />
 
-                            <div className="flex gap-2">
+                            <div style={{ display: 'flex', gap: '8px' }}>
                                 <button 
                                     onClick={() => updateStyle('bold')} 
-                                    className="flex-1 bg-slate-800 hover:bg-slate-700 text-white px-3 py-2 rounded-lg font-bold"
+                                    style={{
+                                        flex: 1,
+                                        backgroundColor: '#1e293b',
+                                        color: 'white',
+                                        border: 'none',
+                                        padding: '8px 12px',
+                                        borderRadius: '8px',
+                                        fontWeight: 'bold',
+                                        cursor: 'pointer'
+                                    }}
                                 >
                                     B
                                 </button>
                                 <button 
                                     onClick={() => updateStyle('italic')} 
-                                    className="flex-1 bg-slate-800 hover:bg-slate-700 text-white px-3 py-2 rounded-lg italic"
+                                    style={{
+                                        flex: 1,
+                                        backgroundColor: '#1e293b',
+                                        color: 'white',
+                                        border: 'none',
+                                        padding: '8px 12px',
+                                        borderRadius: '8px',
+                                        fontStyle: 'italic',
+                                        cursor: 'pointer'
+                                    }}
                                 >
                                     I
                                 </button>
                                 <button 
                                     onClick={() => updateStyle('underline')} 
-                                    className="flex-1 bg-slate-800 hover:bg-slate-700 text-white px-3 py-2 rounded-lg underline"
+                                    style={{
+                                        flex: 1,
+                                        backgroundColor: '#1e293b',
+                                        color: 'white',
+                                        border: 'none',
+                                        padding: '8px 12px',
+                                        borderRadius: '8px',
+                                        textDecoration: 'underline',
+                                        cursor: 'pointer'
+                                    }}
                                 >
                                     U
                                 </button>
@@ -331,30 +414,59 @@ const Landing = () => {
 
                     {/* Import/Export */}
                     <div>
-                        <h3 className="text-lg font-semibold mb-3 text-purple-300">Import & Export</h3>
-                        <div className="space-y-3">
-                            <label className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg cursor-pointer block text-center font-medium transition-all">
-                                📁 Upload Image
+                        <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '12px', color: '#d8b4fe', margin: '0 0 12px 0' }}>Import & Export</h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            <label style={{
+                                backgroundColor: '#16a34a',
+                                color: 'white',
+                                border: 'none',
+                                padding: '12px 16px',
+                                borderRadius: '8px',
+                                width: '100%',
+                                fontWeight: '500',
+                                cursor: 'pointer',
+                                display: 'block',
+                                textAlign: 'center'
+                            }}>
+                                Upload Image
                                 <input
                                     type="file"
                                     accept="image/*"
                                     onChange={handleImageUpload}
-                                    className="hidden"
+                                    style={{ display: 'none' }}
                                 />
                             </label>
 
                             <button
                                 onClick={exportAsPNG}
-                                className="w-full bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-3 rounded-lg font-medium transition-all"
+                                style={{
+                                    backgroundColor: '#ca8a04',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '12px 16px',
+                                    borderRadius: '8px',
+                                    width: '100%',
+                                    fontWeight: '500',
+                                    cursor: 'pointer'
+                                }}
                             >
-                                💾 Export PNG
+                                Export PNG
                             </button>
 
                             <button
                                 onClick={exportAsPDF}
-                                className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium transition-all"
+                                style={{
+                                    backgroundColor: '#dc2626',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '12px 16px',
+                                    borderRadius: '8px',
+                                    width: '100%',
+                                    fontWeight: '500',
+                                    cursor: 'pointer'
+                                }}
                             >
-                                📄 Export PDF
+                                Export PDF
                             </button>
                         </div>
                     </div>
@@ -362,11 +474,24 @@ const Landing = () => {
             </div>
 
             {/* Main Canvas Area */}
-            <div className="flex-1 bg-slate-950 p-6 flex flex-col">
-                <div className="bg-slate-900 rounded-lg p-6 flex-1 flex items-center justify-center">
+            <div style={{ flex: 1, backgroundColor: '#020617', padding: '24px', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ 
+                    backgroundColor: '#0f172a', 
+                    borderRadius: '8px', 
+                    padding: '24px', 
+                    flex: 1, 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center' 
+                }}>
                     <canvas 
                         ref={canvasRef} 
-                        className="border-2 border-slate-700 rounded-lg shadow-2xl bg-white" 
+                        style={{ 
+                            border: '2px solid #374151', 
+                            borderRadius: '8px', 
+                            backgroundColor: 'white',
+                            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+                        }} 
                     />
                 </div>
             </div>
