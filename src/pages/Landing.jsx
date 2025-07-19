@@ -209,81 +209,159 @@ const Landing = () => {
     };
 
     return (
-        <div style={{ display: 'flex', height: '100vh', backgroundColor: '#020617', color: 'white' , marginBottom: '0px'}}>
+        <div style={{ display: 'flex', height: '100vh', backgroundColor: '#020617', color: 'white' }}>
             {/* Left Sidebar */}
-            <div style={{ width: '320px', backgroundColor: '#0f172a', borderRight: '1px solid #374151', padding: '24px', overflowY: 'auto' }}>
-                <div style={{ marginBottom: '32px' }}>
-                    <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#a855f7', margin: 0 }}>PixelPad</h1>
-                    <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '4px', margin: 0 }}>Professional Drawing Studio</p>
+            <div className="w-80 bg-slate-900 border-r border-gray-600 p-6 overflow-y-auto flex-shrink-0">
+                <div className="mb-8">
+                    <h1 className="text-2xl font-bold text-purple-400 m-0">PixelPad</h1>
+                    <p className="text-slate-400 text-sm mt-1 m-0">Professional Drawing Studio</p>
                 </div>
 
                 {/* Drawing Tools */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                <div className="flex flex-col gap-6">
                     <div>
-                        <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '12px', color: '#d8b4fe' }}>Drawing Tools</h3>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                            <button onClick={toggleDrawing} style={{ backgroundColor: isDrawing ? '#9333ea' : '#374151', color: 'white', border: 'none', padding: '12px 16px', borderRadius: '8px', width: '100%', fontWeight: '500', cursor: 'pointer' }}>{isDrawing ? 'Drawing Active' : 'Draw Mode'}</button>
-                            <button onClick={toggleEraser} style={{ backgroundColor: isErasing ? '#dc2626' : '#374151', color: 'white', border: 'none', padding: '12px 16px', borderRadius: '8px', width: '100%', fontWeight: '500', cursor: 'pointer' }}>{isErasing ? 'Erasing Active' : 'Eraser'}</button>
+                        <h3 className="text-lg font-semibold mb-3 text-purple-300">Drawing Tools</h3>
+                        <div className="flex flex-col gap-3">
+                            <button 
+                                onClick={toggleDrawing} 
+                                className={`${isDrawing ? 'bg-purple-600' : 'bg-gray-600'} text-white border-none py-3 px-4 rounded-lg w-full font-medium cursor-pointer hover:opacity-90 transition-opacity`}
+                            >
+                                {isDrawing ? 'Drawing Active' : 'Draw Mode'}
+                            </button>
+                            <button 
+                                onClick={toggleEraser} 
+                                className={`${isErasing ? 'bg-red-600' : 'bg-gray-600'} text-white border-none py-3 px-4 rounded-lg w-full font-medium cursor-pointer hover:opacity-90 transition-opacity`}
+                            >
+                                {isErasing ? 'Erasing Active' : 'Eraser'}
+                            </button>
                         </div>
                     </div>
 
                     {/* Brush Settings */}
                     <div>
-                        <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '12px', color: '#d8b4fe' }}>Brush Settings</h3>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <h3 className="text-lg font-semibold mb-3 text-purple-300">Brush Settings</h3>
+                        <div className="flex flex-col gap-4">
                             <div>
-                                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: '#cbd5e1' }}>Color</label>
-                                <input type="color" value={brushColor} onChange={(e) => changeBrushColor(e.target.value)} disabled={isErasing} style={{ width: '100%', height: '48px', borderRadius: '8px', border: '2px solid #374151', backgroundColor: '#1e293b' }} />
+                                <label className="block text-sm font-medium mb-2 text-slate-300">Color</label>
+                                <input 
+                                    type="color" 
+                                    value={brushColor} 
+                                    onChange={(e) => changeBrushColor(e.target.value)} 
+                                    disabled={isErasing} 
+                                    className="w-full h-12 rounded-lg border-2 border-gray-600 bg-slate-800 cursor-pointer disabled:opacity-50"
+                                />
                             </div>
                             <div>
-                                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: '#cbd5e1' }}>Brush Size: {brushWidth}px</label>
-                                <input type="range" min="1" max="30" value={brushWidth} onChange={(e) => changeBrushWidth(parseInt(e.target.value))} style={{ width: '100%' }} />
+                                <label className="block text-sm font-medium mb-2 text-slate-300">
+                                    Brush Size: {brushWidth}px
+                                </label>
+                                <input 
+                                    type="range" 
+                                    min="1" 
+                                    max="30" 
+                                    value={brushWidth} 
+                                    onChange={(e) => changeBrushWidth(parseInt(e.target.value))} 
+                                    className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer slider"
+                                />
                             </div>
                         </div>
                     </div>
 
                     {/* Text Tools */}
                     <div>
-                        <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '12px', color: '#d8b4fe' }}>Text Tools</h3>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                            <button onClick={addText} style={{ backgroundColor: '#2563eb', color: 'white', border: 'none', padding: '12px 16px', borderRadius: '8px', width: '100%', fontWeight: '500', cursor: 'pointer' }}>Add Text</button>
-                            <button onClick={deleteSelected} style={{ backgroundColor: '#dc2626', color: 'white', border: 'none', padding: '12px 16px', borderRadius: '8px', width: '100%', fontWeight: '500', cursor: 'pointer' }}>Delete Selected</button>
-                            <select value={fontFamily} onChange={(e) => changeFontFamily(e.target.value)} style={{ width: '100%', backgroundColor: '#1e293b', border: '1px solid #374151', color: 'white', padding: '8px 12px', borderRadius: '8px' }}>
+                        <h3 className="text-lg font-semibold mb-3 text-purple-300">Text Tools</h3>
+                        <div className="flex flex-col gap-3">
+                            <button 
+                                onClick={addText} 
+                                className="bg-blue-600 text-white border-none py-3 px-4 rounded-lg w-full font-medium cursor-pointer hover:bg-blue-700 transition-colors"
+                            >
+                                Add Text
+                            </button>
+                            <button 
+                                onClick={deleteSelected} 
+                                className="bg-red-600 text-white border-none py-3 px-4 rounded-lg w-full font-medium cursor-pointer hover:bg-red-700 transition-colors"
+                            >
+                                Delete Selected
+                            </button>
+                            <select 
+                                value={fontFamily} 
+                                onChange={(e) => changeFontFamily(e.target.value)} 
+                                className="w-full bg-slate-800 border border-gray-600 text-white py-2 px-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            >
                                 <option value="Arial">Arial</option>
                                 <option value="Courier New">Courier New</option>
                                 <option value="Georgia">Georgia</option>
                                 <option value="Times New Roman">Times New Roman</option>
                                 <option value="Verdana">Verdana</option>
                             </select>
-                            <input type="number" value={fontSize} onChange={(e) => changeFontSize(parseInt(e.target.value))} placeholder="Font Size" style={{ width: '100%', backgroundColor: '#1e293b', border: '1px solid #374151', color: 'white', padding: '8px 12px', borderRadius: '8px' }} />
-                            <div style={{ display: 'flex', gap: '8px' }}>
-                                <button onClick={() => updateStyle('bold')} style={{ flex: 1, backgroundColor: '#1e293b', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>B</button>
-                                <button onClick={() => updateStyle('italic')} style={{ flex: 1, backgroundColor: '#1e293b', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '8px', fontStyle: 'italic', cursor: 'pointer' }}>I</button>
-                                <button onClick={() => updateStyle('underline')} style={{ flex: 1, backgroundColor: '#1e293b', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '8px', textDecoration: 'underline', cursor: 'pointer' }}>U</button>
+                            <input 
+                                type="number" 
+                                value={fontSize} 
+                                onChange={(e) => changeFontSize(parseInt(e.target.value))} 
+                                placeholder="Font Size" 
+                                className="w-full bg-slate-800 border border-gray-600 text-white py-2 px-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            />
+                            <div className="flex gap-2">
+                                <button 
+                                    onClick={() => updateStyle('bold')} 
+                                    className="flex-1 bg-slate-800 text-white border-none py-2 px-3 rounded-lg font-bold cursor-pointer hover:bg-slate-700 transition-colors"
+                                >
+                                    B
+                                </button>
+                                <button 
+                                    onClick={() => updateStyle('italic')} 
+                                    className="flex-1 bg-slate-800 text-white border-none py-2 px-3 rounded-lg italic cursor-pointer hover:bg-slate-700 transition-colors"
+                                >
+                                    I
+                                </button>
+                                <button 
+                                    onClick={() => updateStyle('underline')} 
+                                    className="flex-1 bg-slate-800 text-white border-none py-2 px-3 rounded-lg underline cursor-pointer hover:bg-slate-700 transition-colors"
+                                >
+                                    U
+                                </button>
                             </div>
                         </div>
                     </div>
 
                     {/* Import/Export */}
                     <div>
-                        <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '12px', color: '#d8b4fe' }}>Import & Export</h3>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                            <label style={{ backgroundColor: '#16a34a', color: 'white', padding: '12px 16px', borderRadius: '8px', width: '100%', display: 'block', textAlign: 'center', cursor: 'pointer', fontWeight: '500' }}>
+                        <h3 className="text-lg font-semibold mb-3 text-purple-300">Import & Export</h3>
+                        <div className="flex flex-col gap-3">
+                            <label className="bg-green-600 text-white py-3 px-4 rounded-lg w-full block text-center cursor-pointer font-medium hover:bg-green-700 transition-colors">
                                 Upload Image
-                                <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
+                                <input 
+                                    type="file" 
+                                    accept="image/*" 
+                                    onChange={handleImageUpload} 
+                                    className="hidden"
+                                />
                             </label>
-                            <button onClick={exportAsPNG} style={{ backgroundColor: '#ca8a04', color: 'white', border: 'none', padding: '12px 16px', borderRadius: '8px', width: '100%', fontWeight: '500', cursor: 'pointer' }}>Export PNG</button>
-                            <button onClick={exportAsPDF} style={{ backgroundColor: '#dc2626', color: 'white', border: 'none', padding: '12px 16px', borderRadius: '8px', width: '100%', fontWeight: '500', cursor: 'pointer' }}>Export PDF</button>
+                            <button 
+                                onClick={exportAsPNG} 
+                                className="bg-yellow-600 text-white border-none py-3 px-4 rounded-lg w-full font-medium cursor-pointer hover:bg-yellow-700 transition-colors"
+                            >
+                                Export PNG
+                            </button>
+                            <button 
+                                onClick={exportAsPDF} 
+                                className="bg-red-600 text-white border-none py-3 px-4 rounded-lg w-full font-medium cursor-pointer hover:bg-red-700 transition-colors"
+                            >
+                                Export PDF
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* Main Canvas Area */}
-            <div style={{ flex: 1, backgroundColor: '#020617', padding: '2px', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ backgroundColor: '#0f172a', borderRadius: '8px', padding: '2px', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ flex: 1, backgroundColor: '#020617', padding: '24px', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ backgroundColor: '#0f172a', borderRadius: '8px', padding: '24px', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <canvas ref={canvasRef} style={{ border: '2px solid #374151', borderRadius: '8px', backgroundColor: 'white', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' }} />
                 </div>
+                
+                {/* Footer */}
+                
             </div>
         </div>
     );
