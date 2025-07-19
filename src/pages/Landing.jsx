@@ -209,7 +209,7 @@ const Landing = () => {
     };
 
     return (
-        <div className="flex h-screen w-screen bg-slate-950 text-white overflow-hidden">
+        <div className="flex h-screen w-full bg-slate-950 text-white overflow-hidden">
             {/* Left Sidebar */}
             <div className="w-80 bg-slate-900 border-r border-gray-600 p-6 overflow-y-auto flex-shrink-0">
                 <div className="mb-8">
@@ -364,15 +364,7 @@ const Landing = () => {
                 </div>
                 
                 {/* Footer */}
-                <div className="bg-slate-900 rounded-lg py-4 px-6 mt-4 border-t border-gray-600 flex justify-between items-center">
-                    <div className="flex items-center gap-4">
-                        <span className="text-purple-400 font-semibold text-base">PixelPad</span>
-                        <span className="text-slate-500 text-sm">Professional Drawing Studio</span>
-                    </div>
-                    <div className="text-slate-500 text-xs">
-                        Made with ❤️ using React & Fabric.js
-                    </div>
-                </div>
+                
             </div>
         </div>
     );
