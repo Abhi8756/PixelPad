@@ -153,6 +153,15 @@ const Landing = () => {
         }
     };
 
+    const deleteSelected = () => {
+        const canvas = fabricRef.current;
+        const active = canvas.getActiveObject();
+        if (active) {
+            canvas.remove(active);
+            canvas.requestRenderAll();
+        }
+    };
+
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -212,47 +221,60 @@ const Landing = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                     <div>
                         <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '12px', color: '#d8b4fe' }}>Drawing Tools</h3>
-                        <button onClick={toggleDrawing} style={{ backgroundColor: isDrawing ? '#9333ea' : '#374151', color: 'white', border: 'none', padding: '12px 16px', borderRadius: '8px', width: '100%', fontWeight: '500', cursor: 'pointer' }}>{isDrawing ? 'Drawing Active' : 'Draw Mode'}</button>
-                        <button onClick={toggleEraser} style={{ backgroundColor: isErasing ? '#dc2626' : '#374151', color: 'white', border: 'none', padding: '12px 16px', borderRadius: '8px', width: '100%', fontWeight: '500', cursor: 'pointer' }}>{isErasing ? 'Erasing Active' : 'Eraser'}</button>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            <button onClick={toggleDrawing} style={{ backgroundColor: isDrawing ? '#9333ea' : '#374151', color: 'white', border: 'none', padding: '12px 16px', borderRadius: '8px', width: '100%', fontWeight: '500', cursor: 'pointer' }}>{isDrawing ? 'Drawing Active' : 'Draw Mode'}</button>
+                            <button onClick={toggleEraser} style={{ backgroundColor: isErasing ? '#dc2626' : '#374151', color: 'white', border: 'none', padding: '12px 16px', borderRadius: '8px', width: '100%', fontWeight: '500', cursor: 'pointer' }}>{isErasing ? 'Erasing Active' : 'Eraser'}</button>
+                        </div>
                     </div>
 
                     {/* Brush Settings */}
                     <div>
                         <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '12px', color: '#d8b4fe' }}>Brush Settings</h3>
-                        <label style={{ color: '#cbd5e1' }}>Color</label>
-                        <input type="color" value={brushColor} onChange={(e) => changeBrushColor(e.target.value)} disabled={isErasing} style={{ width: '100%', height: '48px', borderRadius: '8px', border: '2px solid #374151', backgroundColor: '#1e293b' }} />
-                        <label style={{ color: '#cbd5e1', marginTop: '16px' }}>Brush Size: {brushWidth}px</label>
-                        <input type="range" min="1" max="30" value={brushWidth} onChange={(e) => changeBrushWidth(parseInt(e.target.value))} style={{ width: '100%' }} />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: '#cbd5e1' }}>Color</label>
+                                <input type="color" value={brushColor} onChange={(e) => changeBrushColor(e.target.value)} disabled={isErasing} style={{ width: '100%', height: '48px', borderRadius: '8px', border: '2px solid #374151', backgroundColor: '#1e293b' }} />
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: '#cbd5e1' }}>Brush Size: {brushWidth}px</label>
+                                <input type="range" min="1" max="30" value={brushWidth} onChange={(e) => changeBrushWidth(parseInt(e.target.value))} style={{ width: '100%' }} />
+                            </div>
+                        </div>
                     </div>
 
                     {/* Text Tools */}
                     <div>
                         <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '12px', color: '#d8b4fe' }}>Text Tools</h3>
-                        <button onClick={addText} style={{ backgroundColor: '#2563eb', color: 'white', border: 'none', padding: '12px 16px', borderRadius: '8px', width: '100%', fontWeight: '500', cursor: 'pointer' }}>Add Text</button>
-                        <select value={fontFamily} onChange={(e) => changeFontFamily(e.target.value)} style={{ width: '100%', backgroundColor: '#1e293b', border: '1px solid #374151', color: 'white', padding: '8px 12px', borderRadius: '8px' }}>
-                            <option value="Arial">Arial</option>
-                            <option value="Courier New">Courier New</option>
-                            <option value="Georgia">Georgia</option>
-                            <option value="Times New Roman">Times New Roman</option>
-                            <option value="Verdana">Verdana</option>
-                        </select>
-                        <input type="number" value={fontSize} onChange={(e) => changeFontSize(parseInt(e.target.value))} placeholder="Font Size" style={{ width: '100%', backgroundColor: '#1e293b', border: '1px solid #374151', color: 'white', padding: '8px 12px', borderRadius: '8px' }} />
-                        <div style={{ display: 'flex', gap: '8px' }}>
-                            <button onClick={() => updateStyle('bold')} style={{ flex: 1, backgroundColor: '#1e293b', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>B</button>
-                            <button onClick={() => updateStyle('italic')} style={{ flex: 1, backgroundColor: '#1e293b', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '8px', fontStyle: 'italic', cursor: 'pointer' }}>I</button>
-                            <button onClick={() => updateStyle('underline')} style={{ flex: 1, backgroundColor: '#1e293b', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '8px', textDecoration: 'underline', cursor: 'pointer' }}>U</button>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            <button onClick={addText} style={{ backgroundColor: '#2563eb', color: 'white', border: 'none', padding: '12px 16px', borderRadius: '8px', width: '100%', fontWeight: '500', cursor: 'pointer' }}>Add Text</button>
+                            <button onClick={deleteSelected} style={{ backgroundColor: '#dc2626', color: 'white', border: 'none', padding: '12px 16px', borderRadius: '8px', width: '100%', fontWeight: '500', cursor: 'pointer' }}>Delete Selected</button>
+                            <select value={fontFamily} onChange={(e) => changeFontFamily(e.target.value)} style={{ width: '100%', backgroundColor: '#1e293b', border: '1px solid #374151', color: 'white', padding: '8px 12px', borderRadius: '8px' }}>
+                                <option value="Arial">Arial</option>
+                                <option value="Courier New">Courier New</option>
+                                <option value="Georgia">Georgia</option>
+                                <option value="Times New Roman">Times New Roman</option>
+                                <option value="Verdana">Verdana</option>
+                            </select>
+                            <input type="number" value={fontSize} onChange={(e) => changeFontSize(parseInt(e.target.value))} placeholder="Font Size" style={{ width: '100%', backgroundColor: '#1e293b', border: '1px solid #374151', color: 'white', padding: '8px 12px', borderRadius: '8px' }} />
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                                <button onClick={() => updateStyle('bold')} style={{ flex: 1, backgroundColor: '#1e293b', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>B</button>
+                                <button onClick={() => updateStyle('italic')} style={{ flex: 1, backgroundColor: '#1e293b', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '8px', fontStyle: 'italic', cursor: 'pointer' }}>I</button>
+                                <button onClick={() => updateStyle('underline')} style={{ flex: 1, backgroundColor: '#1e293b', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '8px', textDecoration: 'underline', cursor: 'pointer' }}>U</button>
+                            </div>
                         </div>
                     </div>
 
                     {/* Import/Export */}
                     <div>
                         <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '12px', color: '#d8b4fe' }}>Import & Export</h3>
-                        <label style={{ backgroundColor: '#16a34a', color: 'white', padding: '12px 16px', borderRadius: '8px', width: '100%', display: 'block', textAlign: 'center', cursor: 'pointer' }}>
-                            Upload Image
-                            <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
-                        </label>
-                        <button onClick={exportAsPNG} style={{ backgroundColor: '#ca8a04', color: 'white', border: 'none', padding: '12px 16px', borderRadius: '8px', width: '100%', fontWeight: '500', cursor: 'pointer' }}>Export PNG</button>
-                        <button onClick={exportAsPDF} style={{ backgroundColor: '#dc2626', color: 'white', border: 'none', padding: '12px 16px', borderRadius: '8px', width: '100%', fontWeight: '500', cursor: 'pointer' }}>Export PDF</button>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            <label style={{ backgroundColor: '#16a34a', color: 'white', padding: '12px 16px', borderRadius: '8px', width: '100%', display: 'block', textAlign: 'center', cursor: 'pointer', fontWeight: '500' }}>
+                                Upload Image
+                                <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
+                            </label>
+                            <button onClick={exportAsPNG} style={{ backgroundColor: '#ca8a04', color: 'white', border: 'none', padding: '12px 16px', borderRadius: '8px', width: '100%', fontWeight: '500', cursor: 'pointer' }}>Export PNG</button>
+                            <button onClick={exportAsPDF} style={{ backgroundColor: '#dc2626', color: 'white', border: 'none', padding: '12px 16px', borderRadius: '8px', width: '100%', fontWeight: '500', cursor: 'pointer' }}>Export PDF</button>
+                        </div>
                     </div>
                 </div>
             </div>
