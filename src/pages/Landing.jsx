@@ -206,95 +206,171 @@ const Landing = () => {
 
 
     return (
-        <>
-            <div className="text-center w-full h-screen bg-blue-100">
-                <h1 className="text-4xl font-bold mt-20">Welcome to PixelPad</h1>
-                <p className="mt-4 text-lg">Your go-to platform for pixel art creation and sharing.</p>
-
-                {/* Toolbar */}
-                <div className="flex flex-wrap gap-2 items-center">
-                    <button
-                        onClick={toggleDrawing}
-                        className={`px-3 py-1 rounded ${isDrawing ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}
-                    >
-                        {isDrawing ? 'Exit Draw' : 'Draw Mode'}
-                    </button>
-
-                    <button
-                        onClick={toggleEraser}
-                        className={`px-3 py-1 rounded ${isErasing ? 'bg-red-500 text-white' : 'bg-orange-500 text-white'}`}
-                    >
-                        {isErasing ? 'Exit Eraser' : 'Eraser'}
-                    </button>
-
-                    <input
-                        type="color"
-                        value={brushColor}
-                        onChange={(e) => changeBrushColor(e.target.value)}
-                        className="w-10 h-10 p-1"
-                        disabled={isErasing}
-                    />
-
-                    <input
-                        type="range"
-                        min="1"
-                        max="30"
-                        value={brushWidth}
-                        onChange={(e) => changeBrushWidth(parseInt(e.target.value))}
-                        className="w-32"
-                    />
-                    <button onClick={addText} className="bg-blue-500 text-white px-3 py-1 rounded">Add Text</button>
-
-                    <select
-                        value={fontFamily}
-                        onChange={(e) => changeFontFamily(e.target.value)}
-                        className="border px-2 py-1"
-                    >
-                        <option value="Arial">Arial</option>
-                        <option value="Courier New">Courier New</option>
-                        <option value="Georgia">Georgia</option>
-                        <option value="Times New Roman">Times New Roman</option>
-                        <option value="Verdana">Verdana</option>
-                    </select>
-
-                    <input
-                        type="number"
-                        value={fontSize}
-                        onChange={(e) => changeFontSize(parseInt(e.target.value))}
-                        className="border w-20 px-2 py-1"
-                    />
-
-                    <button onClick={() => updateStyle('bold')} className="bg-gray-200 px-3 py-1 rounded">B</button>
-                    <button onClick={() => updateStyle('italic')} className="bg-gray-200 px-3 py-1 rounded italic">I</button>
-                    <button onClick={() => updateStyle('underline')} className="bg-gray-200 px-3 py-1 rounded underline">U</button>
-                    <label className="bg-purple-500 text-white px-3 py-1 rounded cursor-pointer">
-                        Upload Image
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                            className="hidden"
-                        />
-                    </label>
-                    <button
-                        onClick={exportAsPNG}
-                        className="bg-yellow-500 text-white px-3 py-1 rounded"
-                    >
-                        Export PNG
-                    </button>
-
-                    <button
-                        onClick={exportAsPDF}
-                        className="bg-red-500 text-white px-3 py-1 rounded"
-                    >
-                        Export PDF
-                    </button>
-
+        <div className="flex h-screen bg-slate-950 text-white">
+            {/* Left Sidebar - Tools */}
+            <div className="w-80 bg-slate-900 border-r border-slate-700 p-6 overflow-y-auto">
+                {/* Header */}
+                <div className="mb-8">
+                    <h1 className="text-2xl font-bold text-purple-400">PixelPad</h1>
+                    <p className="text-slate-400 text-sm mt-1">Professional Drawing Studio</p>
                 </div>
 
-                <canvas ref={canvasRef} className="border border-gray-300 shadow-lg" />
+                {/* Drawing Tools */}
+                <div className="space-y-6">
+                    <div>
+                        <h3 className="text-lg font-semibold mb-3 text-purple-300">Drawing Tools</h3>
+                        <div className="space-y-3">
+                            <button
+                                onClick={toggleDrawing}
+                                className={`w-full px-4 py-3 rounded-lg font-medium transition-all ${
+                                    isDrawing 
+                                        ? 'bg-purple-600 text-white shadow-lg' 
+                                        : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                                }`}
+                            >
+                                {isDrawing ? '🎨 Drawing Active' : '✏️ Draw Mode'}
+                            </button>
+
+                            <button
+                                onClick={toggleEraser}
+                                className={`w-full px-4 py-3 rounded-lg font-medium transition-all ${
+                                    isErasing 
+                                        ? 'bg-red-600 text-white shadow-lg' 
+                                        : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                                }`}
+                            >
+                                {isErasing ? '🧹 Erasing Active' : '🧽 Eraser'}
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Brush Settings */}
+                    <div>
+                        <h3 className="text-lg font-semibold mb-3 text-purple-300">Brush Settings</h3>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium mb-2 text-slate-300">Color</label>
+                                <input
+                                    type="color"
+                                    value={brushColor}
+                                    onChange={(e) => changeBrushColor(e.target.value)}
+                                    className="w-full h-12 rounded-lg border-2 border-slate-700 bg-slate-800"
+                                    disabled={isErasing}
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-2 text-slate-300">
+                                    Brush Size: {brushWidth}px
+                                </label>
+                                <input
+                                    type="range"
+                                    min="1"
+                                    max="30"
+                                    value={brushWidth}
+                                    onChange={(e) => changeBrushWidth(parseInt(e.target.value))}
+                                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Text Tools */}
+                    <div>
+                        <h3 className="text-lg font-semibold mb-3 text-purple-300">Text Tools</h3>
+                        <div className="space-y-3">
+                            <button 
+                                onClick={addText} 
+                                className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-medium transition-all"
+                            >
+                                📝 Add Text
+                            </button>
+
+                            <select
+                                value={fontFamily}
+                                onChange={(e) => changeFontFamily(e.target.value)}
+                                className="w-full bg-slate-800 border border-slate-700 text-white px-3 py-2 rounded-lg"
+                            >
+                                <option value="Arial">Arial</option>
+                                <option value="Courier New">Courier New</option>
+                                <option value="Georgia">Georgia</option>
+                                <option value="Times New Roman">Times New Roman</option>
+                                <option value="Verdana">Verdana</option>
+                            </select>
+
+                            <input
+                                type="number"
+                                value={fontSize}
+                                onChange={(e) => changeFontSize(parseInt(e.target.value))}
+                                className="w-full bg-slate-800 border border-slate-700 text-white px-3 py-2 rounded-lg"
+                                placeholder="Font Size"
+                            />
+
+                            <div className="flex gap-2">
+                                <button 
+                                    onClick={() => updateStyle('bold')} 
+                                    className="flex-1 bg-slate-800 hover:bg-slate-700 text-white px-3 py-2 rounded-lg font-bold"
+                                >
+                                    B
+                                </button>
+                                <button 
+                                    onClick={() => updateStyle('italic')} 
+                                    className="flex-1 bg-slate-800 hover:bg-slate-700 text-white px-3 py-2 rounded-lg italic"
+                                >
+                                    I
+                                </button>
+                                <button 
+                                    onClick={() => updateStyle('underline')} 
+                                    className="flex-1 bg-slate-800 hover:bg-slate-700 text-white px-3 py-2 rounded-lg underline"
+                                >
+                                    U
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Import/Export */}
+                    <div>
+                        <h3 className="text-lg font-semibold mb-3 text-purple-300">Import & Export</h3>
+                        <div className="space-y-3">
+                            <label className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg cursor-pointer block text-center font-medium transition-all">
+                                📁 Upload Image
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageUpload}
+                                    className="hidden"
+                                />
+                            </label>
+
+                            <button
+                                onClick={exportAsPNG}
+                                className="w-full bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-3 rounded-lg font-medium transition-all"
+                            >
+                                💾 Export PNG
+                            </button>
+
+                            <button
+                                onClick={exportAsPDF}
+                                className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium transition-all"
+                            >
+                                📄 Export PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </>
+
+            {/* Main Canvas Area */}
+            <div className="flex-1 bg-slate-950 p-6 flex flex-col">
+                <div className="bg-slate-900 rounded-lg p-6 flex-1 flex items-center justify-center">
+                    <canvas 
+                        ref={canvasRef} 
+                        className="border-2 border-slate-700 rounded-lg shadow-2xl bg-white" 
+                    />
+                </div>
+            </div>
+        </div>
     )
 }
 
