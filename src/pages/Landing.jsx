@@ -14,7 +14,7 @@ const Landing = () => {
 
     useEffect(() => {
         const canvas = new fabric.Canvas(canvasRef.current, {
-            width: 800,
+            width: 1000,
             height: 600,
             backgroundColor: '#ffffff',
         });
@@ -209,7 +209,7 @@ const Landing = () => {
     };
 
     return (
-        <div style={{ display: 'flex', height: '100vh', backgroundColor: '#020617', color: 'white' }}>
+        <div style={{ display: 'flex', height: '100vh', backgroundColor: '#020617', color: 'white' , marginBottom: '0px'}}>
             {/* Left Sidebar */}
             <div style={{ width: '320px', backgroundColor: '#0f172a', borderRight: '1px solid #374151', padding: '24px', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '32px' }}>
@@ -280,8 +280,8 @@ const Landing = () => {
             </div>
 
             {/* Main Canvas Area */}
-            <div style={{ flex: 1, backgroundColor: '#020617', padding: '24px', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ backgroundColor: '#0f172a', borderRadius: '8px', padding: '24px', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ flex: 1, backgroundColor: '#020617', padding: '2px', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ backgroundColor: '#0f172a', borderRadius: '8px', padding: '2px', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <canvas ref={canvasRef} style={{ border: '2px solid #374151', borderRadius: '8px', backgroundColor: 'white', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' }} />
                 </div>
             </div>
